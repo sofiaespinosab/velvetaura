@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Historial de eventos - VelvetAura</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 24px; max-width: 980px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 8px; }
+        th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; }
+    </style>
+</head>
+<body>
+<h1>Historial de eventos</h1>
+<p><a th:href="@{/productos}">Ir a productos</a></p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Fecha</th>
+        <th>Tipo</th>
+        <th>Descripción</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="e : ${eventos}">
+        <td th:text="${#temporals.format(e.fecha, 'dd/MM/yyyy HH:mm:ss')}"></td>
+        <td th:text="${e.tipo}"></td>
+        <td th:text="${e.descripcion}"></td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(eventos)}">
+        <td colspan="3">Todavía no hay eventos.</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
