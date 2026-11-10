@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes - VelvetAura</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 24px; max-width: 980px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 8px; }
+        th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; }
+        fieldset { margin-bottom: 16px; padding: 12px; }
+        .ok { color: #1b7f3b; }
+        .error { color: #b00020; }
+        input { margin: 3px 6px 3px 0; padding: 3px; }
+    </style>
+</head>
+<body>
+<h1>Clientes</h1>
+<p>
+    <a th:href="@{/productos}">Productos</a> |
+    <a th:href="@{/eventos}">Historial de eventos</a>
+</p>
+
+<p class="ok" th:if="${mensaje}" th:text="${mensaje}"></p>
+
+<!-- F05: registrar cliente -->
+<fieldset>
+    <legend>Registrar cliente</legend>
+    <form th:action="@{/clientes}" th:object="${cliente}" method="post">
+        <div>
+            Identificación: <input type="text" th:field="*{identificacion}">
+            <span class="error" th:errors="*{identificacion}"></span>
+        </div>
+        <div>
+            Nombre: <input type="text" th:field="*{nombre}">
+            <span class="error" th:errors="*{nombre}"></span>
+        </div>
+        <div>
+            Correo: <input type="text" th:field="*{correo}">
+            <span class="error" th:errors="*{correo}"></span>
+        </div>
+        <button type="submit">Guardar cliente</button>
+    </form>
+</fieldset>
+
+<fieldset>
+    <legend>Clientes registrados</legend>
+    <table>
+        <thead>
+        <tr>
+            <th>Identificación</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="c : ${clientes}">
+            <td th:text="${c.identificacion}"></td>
+            <td th:text="${c.nombre}"></td>
+            <td th:text="${c.correo}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(clientes)}">
+            <td colspan="3">No hay clientes registrados.</td>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>
+</body>
+</html>

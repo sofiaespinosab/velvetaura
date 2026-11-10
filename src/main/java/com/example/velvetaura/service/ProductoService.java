@@ -84,4 +84,20 @@ public class ProductoService {
                 "Se sumaron " + cantidad + " unidades al producto " + producto.getSku()
                         + " (stock actual: " + producto.getStock() + ")");
     }
+
+    // Para los pedidos (F06): ¿hay suficiente stock de este producto?
+    public boolean hayStock(String sku, int cantidad) {
+        Producto producto = catalogo.get(normalizar(sku));
+        return producto != null && cantidad > 0 && producto.getStock() >= cantidad;
+    }
+
+    // Para los pedidos (F06): resta unidades. Primero se debe comprobar con hayStock
+    public void descontarStock(String sku, int cantidad) {
+        Producto producto = catalogo.get(normalizar(sku));
+        if (producto == null || cantidad <= 0 || producto.getStock() < cantidad) {
+            throw new IllegalArgumentException("Stock insuficiente para el producto " + sku);
+        }
+        producto.setStock(producto.getStock() - cantidad);
+        repository.save(producto);
+    }
 }
