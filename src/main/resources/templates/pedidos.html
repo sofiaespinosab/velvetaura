@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pedidos - VelvetAura</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilo.css}">
+</head>
+<body>
+<div class="contenedor">
+<div class="marca">💖 VelvetAura 💖</div>
+<h1>Pedidos</h1>
+<nav class="menu">
+    <a th:href="@{/productos}">🛍️ Productos</a>
+    <a th:href="@{/clientes}">💌 Clientes</a>
+    <a th:href="@{/pedidos}">🧾 Pedidos</a>
+    <a th:href="@{/eventos}">📖 Historial</a>
+</nav>
+
+<p class="ok" th:if="${mensaje}" th:text="${mensaje}"></p>
+<p class="error" th:if="${error}" th:text="${error}"></p>
+
+<!-- F06: crear pedido -->
+<fieldset>
+    <legend>Crear pedido</legend>
+    <form th:action="@{/pedidos/crear}" method="post">
+        <div>
+            Cliente:
+            <select name="identificacion" required>
+                <option value="">-- Elige un cliente --</option>
+                <option th:each="c : ${clientes}" th:value="${c.identificacion}"
+                        th:text="${c.nombre + ' (' + c.identificacion + ')'}"></option>
+            </select>
+            Prioridad:
+            <select name="prioridad" required>
+                <option th:each="p : ${prioridades}" th:value="${p}" th:text="${p}"></option>
+            </select>
+        </div>
+        <p>Productos del pedido (las filas vacías se ignoran):</p>
+        <div th:each="i : ${#numbers.sequence(1, 5)}">
+            SKU: <input type="text" name="skus" placeholder="Ej: LAB01">
+            Cantidad: <input type="number" name="cantidades" min="1" style="width: 90px">
+        </div>
+        <button type="submit">Crear pedido</button>
+    </form>
+
+    <p>Productos disponibles:</p>
+    <table>
+        <thead>
+        <tr>
+            <th>SKU</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Stock</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${productos}">
+            <td th:text="${p.sku}"></td>
+            <td th:text="${p.nombre}"></td>
+            <td th:text="${p.precio}"></td>
+            <td th:text="${p.stock}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(productos)}">
+            <td colspan="4">No hay productos registrados.</td>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>
+
+<!-- F07 y F08: cola de atención -->
+<fieldset>
+    <legend>Cola de atención</legend>
+    <form th:action="@{/pedidos/atender}" method="post">
+        <button type="submit">Atender siguiente pedido</button>
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <th>Turno</th>
+            <th>Pedido</th>
+            <th>Cliente</th>
+            <th>Prioridad</th>
+            <th>Fecha</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p, fila : ${cola}">
+            <td th:text="${fila.count}"></td>
+            <td th:text="${'#' + p.id}"></td>
+            <td th:text="${p.cliente.nombre}"></td>
+            <td th:text="${p.prioridad}"></td>
+            <td th:text="${#temporals.format(p.fechaCreacion, 'dd/MM/yyyy HH:mm:ss')}"></td>
+            <td th:text="${p.total}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(cola)}">
+            <td colspan="6">No hay pedidos pendientes.</td>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>
+
+<!-- F09 y F10: todos los pedidos -->
+<fieldset>
+    <legend>Todos los pedidos</legend>
+    <form th:action="@{/pedidos/deshacer}" method="post">
+        <button type="submit">Deshacer último cambio de estado</button>
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <th>Pedido</th>
+            <th>Cliente</th>
+            <th>Productos</th>
+            <th>Prioridad</th>
+            <th>Estado</th>
+            <th>Total</th>
+            <th>Acción</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${pedidos}">
+            <td th:text="${'#' + p.id}"></td>
+            <td th:text="${p.cliente.nombre}"></td>
+            <td>
+                <div th:each="d : ${p.detalles}" th:text="${d.cantidad + ' x ' + d.nombreProducto}"></div>
+            </td>
+            <td th:text="${p.prioridad}"></td>
+            <td><b th:text="${p.estado}"></b></td>
+            <td th:text="${p.total}"></td>
+            <td>
+                <form class="inline"
+                      th:if="${p.estado.name() == 'EN_PREPARACION' or p.estado.name() == 'ENVIADO'}"
+                      th:action="@{/pedidos/{id}/avanzar(id=${p.id})}" method="post">
+                    <button type="submit">Avanzar estado</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(pedidos)}">
+            <td colspan="7">Todavía no hay pedidos.</td>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>
+</div>
+</body>
+</html>

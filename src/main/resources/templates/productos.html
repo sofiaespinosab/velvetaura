@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Productos - VelvetAura</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 24px; max-width: 980px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 8px; }
+        th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; }
+        fieldset { margin-bottom: 16px; padding: 12px; }
+        .ok { color: #1b7f3b; }
+        .error { color: #b00020; }
+        form.inline { display: inline; }
+        input, select { margin: 3px 6px 3px 0; padding: 3px; }
+    </style>
+</head>
+<body>
+<h1>Productos</h1>
+<p><a th:href="@{/clientes}">Clientes</a> | <a th:href="@{/eventos}">Historial de eventos</a></p>
+
+<p class="ok" th:if="${mensaje}" th:text="${mensaje}"></p>
+<p class="error" th:if="${error}" th:text="${error}"></p>
+
+<!-- F01: registrar producto -->
+<fieldset>
+    <legend>Registrar producto</legend>
+    <form th:action="@{/productos}" th:object="${producto}" method="post">
+        <div>
+            SKU: <input type="text" th:field="*{sku}">
+            <span class="error" th:errors="*{sku}"></span>
+        </div>
+        <div>
+            Nombre: <input type="text" th:field="*{nombre}">
+            <span class="error" th:errors="*{nombre}"></span>
+        </div>
+        <div>
+            Categoría:
+            <select th:field="*{categoria}">
+                <option value="">-- Elige --</option>
+                <option th:each="c : ${categorias}" th:value="${c}" th:text="${c}"></option>
+            </select>
+            <span class="error" th:errors="*{categoria}"></span>
+        </div>
+        <div>
+            Precio: <input type="number" step="any" th:field="*{precio}">
+            <span class="error" th:errors="*{precio}"></span>
+        </div>
+        <div>
+            Stock inicial: <input type="number" th:field="*{stock}">
+            <span class="error" th:errors="*{stock}"></span>
+        </div>
+        <button type="submit">Guardar producto</button>
+    </form>
+</fieldset>
+
+<!-- F02: consultar por SKU -->
+<fieldset>
+    <legend>Consultar producto por SKU</legend>
+    <form th:action="@{/productos/buscar}" method="get">
+        SKU: <input type="text" name="sku">
+        <button type="submit">Buscar</button>
+    </form>
+    <div th:if="${resultado}">
+        <p>
+            <b th:text="${resultado.nombre}"></b>
+            (SKU <span th:text="${resultado.sku}"></span>) -
+            Categoría: <span th:text="${resultado.categoria}"></span> -
+            Precio: <span th:text="${resultado.precio}"></span> -
+            Stock actual: <b th:text="${resultado.stock}"></b>
+        </p>
+    </div>
+</fieldset>
+
+<!-- F03: listar y filtrar por categoría -->
+<fieldset>
+    <legend>Catálogo</legend>
+    <form th:action="@{/productos}" method="get">
+        Filtrar por categoría:
+        <select name="categoria">
+            <option value="">Todas</option>
+            <option th:each="c : ${categorias}" th:value="${c}" th:text="${c}"
+                    th:selected="${c == categoriaSeleccionada}"></option>
+        </select>
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <table>
+        <thead>
+        <tr>
+            <th>SKU</th>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Reponer stock</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${productos}">
+            <td th:text="${p.sku}"></td>
+            <td th:text="${p.nombre}"></td>
+            <td th:text="${p.categoria}"></td>
+            <td th:text="${p.precio}"></td>
+            <td th:text="${p.stock}"></td>
+            <td>
+                <!-- F04: reponer stock -->
+                <form class="inline" th:action="@{/productos/reponer}" method="post">
+                    <input type="hidden" name="sku" th:value="${p.sku}">
+                    <input type="number" name="cantidad" placeholder="Cantidad" style="width: 90px">
+                    <button type="submit">Sumar</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(productos)}">
+            <td colspan="6">No hay productos para mostrar.</td>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>
+</body>
+</html>
