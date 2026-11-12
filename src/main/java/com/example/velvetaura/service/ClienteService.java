@@ -17,14 +17,14 @@ public class ClienteService {
 
     private final ClienteRepository repository;
 
-    // Tabla hash: la clave es la identificación del cliente (búsqueda y duplicados en O(1))
+
     private final Map<String, Cliente> clientes = new HashMap<>();
 
     public ClienteService(ClienteRepository repository) {
         this.repository = repository;
     }
 
-    // Al iniciar se llena el HashMap con los clientes guardados en PostgreSQL
+
     @PostConstruct
     public void cargarClientes() {
         for (Cliente c : repository.findAll()) {
@@ -36,7 +36,7 @@ public class ClienteService {
         return identificacion == null ? "" : identificacion.trim();
     }
 
-    // F05
+
     public Cliente registrar(Cliente cliente) {
         String identificacion = normalizar(cliente.getIdentificacion());
         if (clientes.containsKey(identificacion)) {
@@ -48,7 +48,7 @@ public class ClienteService {
         return guardado;
     }
 
-    // Lo usa el pedido (F06) para comprobar que el cliente existe
+
     public Optional<Cliente> buscarPorIdentificacion(String identificacion) {
         return Optional.ofNullable(clientes.get(normalizar(identificacion)));
     }
