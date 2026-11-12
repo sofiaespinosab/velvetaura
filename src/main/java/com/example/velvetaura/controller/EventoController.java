@@ -16,7 +16,6 @@ public class EventoController {
         this.service = service;
     }
 
-    // F11: historial de eventos
     @GetMapping
     public String listar(Model model) {
         model.addAttribute("eventos", service.listar());

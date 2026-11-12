@@ -23,7 +23,6 @@ public class Evento {
 
     private LocalDateTime fecha;
 
-    // JPA necesita un constructor vacío
     protected Evento() {
     }
 

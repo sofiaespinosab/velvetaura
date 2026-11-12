@@ -3,10 +3,7 @@ package com.example.velvetaura.estructuras;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Lista enlazada simple propia (como la vista en clase).
- * Insertar al inicio es O(1), así que el elemento más reciente queda siempre de primero.
- */
+
 public class Lista<T> {
 
     private Nodo<T> cabeza;
@@ -27,7 +24,6 @@ public class Lista<T> {
         return cabeza == null;
     }
 
-    // Recorre la lista de la cabeza al final, O(n)
     public List<T> aLista() {
         List<T> resultado = new ArrayList<>();
         Nodo<T> actual = cabeza;
