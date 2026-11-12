@@ -20,7 +20,7 @@ public class ProductoService {
     private final ProductoRepository repository;
     private final EventoService eventoService;
 
-    // Tabla hash: la clave es el SKU, el valor es el producto (consulta en O(1))
+
     private final Map<String, Producto> catalogo = new HashMap<>();
 
     public ProductoService(ProductoRepository repository, EventoService eventoService) {
@@ -28,7 +28,7 @@ public class ProductoService {
         this.eventoService = eventoService;
     }
 
-    // Al iniciar la aplicación se llena el HashMap con lo que hay en PostgreSQL
+
     @PostConstruct
     public void cargarCatalogo() {
         for (Producto p : repository.findAll()) {
@@ -40,7 +40,7 @@ public class ProductoService {
         return sku == null ? "" : sku.trim().toUpperCase();
     }
 
-    // F01
+
     public Producto registrar(Producto producto) {
         String sku = normalizar(producto.getSku());
         if (catalogo.containsKey(sku)) {
@@ -52,12 +52,12 @@ public class ProductoService {
         return guardado;
     }
 
-    // F02
+
     public Optional<Producto> buscarPorSku(String sku) {
         return Optional.ofNullable(catalogo.get(normalizar(sku)));
     }
 
-    // F03: si categoria es null devuelve todos
+
     public List<Producto> listar(Categoria categoria) {
         List<Producto> resultado = new ArrayList<>();
         for (Producto p : catalogo.values()) {
@@ -69,7 +69,7 @@ public class ProductoService {
         return resultado;
     }
 
-    // F04
+
     public void reponerStock(String sku, int cantidad) {
         if (cantidad <= 0) {
             throw new IllegalArgumentException("La cantidad debe ser mayor que 0");
@@ -85,13 +85,13 @@ public class ProductoService {
                         + " (stock actual: " + producto.getStock() + ")");
     }
 
-    // Para los pedidos (F06): ¿hay suficiente stock de este producto?
+
     public boolean hayStock(String sku, int cantidad) {
         Producto producto = catalogo.get(normalizar(sku));
         return producto != null && cantidad > 0 && producto.getStock() >= cantidad;
     }
 
-    // Para los pedidos (F06): resta unidades. Primero se debe comprobar con hayStock
+
     public void descontarStock(String sku, int cantidad) {
         Producto producto = catalogo.get(normalizar(sku));
         if (producto == null || cantidad <= 0 || producto.getStock() < cantidad) {
