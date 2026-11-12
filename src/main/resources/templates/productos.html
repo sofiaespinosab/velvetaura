@@ -20,7 +20,7 @@
 <p class="ok" th:if="${mensaje}" th:text="${mensaje}"></p>
 <p class="error" th:if="${error}" th:text="${error}"></p>
 
-<!-- F01: registrar producto -->
+
 <fieldset>
     <legend>Registrar producto</legend>
     <form th:action="@{/productos}" th:object="${producto}" method="post">
@@ -52,7 +52,7 @@
     </form>
 </fieldset>
 
-<!-- F02: consultar por SKU -->
+
 <fieldset>
     <legend>Consultar producto por SKU</legend>
     <form th:action="@{/productos/buscar}" method="get">
@@ -70,7 +70,7 @@
     </div>
 </fieldset>
 
-<!-- F03: listar y filtrar por categoría -->
+
 <fieldset>
     <legend>Catálogo</legend>
     <form th:action="@{/productos}" method="get">
@@ -102,7 +102,7 @@
             <td th:text="${p.precio}"></td>
             <td th:text="${p.stock}"></td>
             <td>
-                <!-- F04: reponer stock -->
+
                 <form class="inline" th:action="@{/productos/reponer}" method="post">
                     <input type="hidden" name="sku" th:value="${p.sku}">
                     <input type="number" name="cantidad" placeholder="Cantidad" style="width: 90px">
