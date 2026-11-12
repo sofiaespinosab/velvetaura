@@ -3,22 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Clientes - VelvetAura</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 24px; max-width: 980px; }
-        table { border-collapse: collapse; width: 100%; margin-top: 8px; }
-        th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; }
-        fieldset { margin-bottom: 16px; padding: 12px; }
-        .ok { color: #1b7f3b; }
-        .error { color: #b00020; }
-        input { margin: 3px 6px 3px 0; padding: 3px; }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilo.css}">
 </head>
 <body>
+<div class="contenedor">
+<div class="marca">💖 VelvetAura 💖</div>
 <h1>Clientes</h1>
-<p>
-    <a th:href="@{/productos}">Productos</a> |
-    <a th:href="@{/eventos}">Historial de eventos</a>
-</p>
+<nav class="menu">
+    <a th:href="@{/productos}">🛍️ Productos</a>
+    <a th:href="@{/clientes}">💌 Clientes</a>
+    <a th:href="@{/eventos}">📖 Historial</a>
+</nav>
 
 <p class="ok" th:if="${mensaje}" th:text="${mensaje}"></p>
 
@@ -64,5 +61,6 @@
         </tbody>
     </table>
 </fieldset>
+</div>
 </body>
 </html>

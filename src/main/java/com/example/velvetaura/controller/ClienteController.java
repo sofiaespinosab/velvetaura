@@ -31,7 +31,6 @@ public class ClienteController {
         return "clientes";
     }
 
-    // F05: registrar cliente
     @PostMapping
     public String crear(@Valid @ModelAttribute("cliente") Cliente cliente,
                         BindingResult result,
