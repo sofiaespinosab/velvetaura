@@ -26,14 +26,14 @@ public class ProductoController {
         this.service = service;
     }
 
-    // Datos que necesita la página en todos los casos
+
     private void cargarPagina(Model model, Categoria categoria) {
         model.addAttribute("productos", service.listar(categoria));
         model.addAttribute("categorias", Categoria.values());
         model.addAttribute("categoriaSeleccionada", categoria);
     }
 
-    // F03: listar y filtrar por categoría
+
     @GetMapping
     public String listar(@RequestParam(required = false) Categoria categoria, Model model) {
         cargarPagina(model, categoria);
@@ -43,8 +43,7 @@ public class ProductoController {
         return "productos";
     }
 
-    // F01: registrar producto
-    @PostMapping
+        @PostMapping
     public String crear(@Valid @ModelAttribute("producto") Producto producto,
                         BindingResult result,
                         Model model,
@@ -62,7 +61,7 @@ public class ProductoController {
         return "productos";
     }
 
-    // F02: consultar por SKU
+
     @GetMapping("/buscar")
     public String buscar(@RequestParam String sku, Model model) {
         Optional<Producto> encontrado = service.buscarPorSku(sku);
@@ -76,7 +75,7 @@ public class ProductoController {
         return "productos";
     }
 
-    // F04: reponer stock
+
     @PostMapping("/reponer")
     public String reponer(@RequestParam String sku,
                           @RequestParam int cantidad,
