@@ -1,6 +1,6 @@
 VelvetAura
 
-Sistema web para una tienda de cosméticos: catálogo de productos, clientes, pedidos con cola de prioridad e historial de eventos. Proyecto final de Estructuras de Datos 2026-2.
+Sistema web para una tienda de cosméticos: catálogo de productos, clientes, pedidos con cola de prioridad e historial de eventos. Proyecto final de Estructuras de Datos 2026.
 
 Autoras: Sofia Espinosa Bedoya y Nikol Mosquera Mosquera
 
